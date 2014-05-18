@@ -53,7 +53,7 @@ class Core
      * Connection database
      */
 
-    function connect_db()
+    function connectDb()
     {
         $this->db = new mysqli($this->config['db.host'], $this->config['db.user'], $this->config['db.pass'], $this->config['db.name'], $this->config['db.port']);
         if ($this->db->connect_error) {
@@ -66,7 +66,7 @@ class Core
      * user Authentication
      */
 
-    function user_access()
+    function userAccess()
     {
         if (!empty($_GET['logout'])) {
             $_SESSION['admin'] = false;
@@ -74,16 +74,16 @@ class Core
         } elseif (!empty($_POST['username']) && !empty($_POST['password'])) {
             $error = false;
             if ($_POST['username'] != $this->config['user.login']) {
-                $this->add_msg('Invalid username', 'danger');
+                $this->addMsg('Invalid username', 'danger');
                 $error = true;
             }
             if ($_POST['password'] != $this->config['user.pass']) {
-                $this->add_msg('Invalid password', 'danger');
+                $this->addMsg('Invalid password', 'danger');
                 $error = true;
             }
             if (!$error) {
                 $_SESSION['admin'] = true;
-                $this->add_msg('Sign executed successfully', 'success');
+                $this->addMsg('Sign executed successfully', 'success');
             } else {
                 $_SESSION['admin'] = false;
             }
@@ -98,9 +98,9 @@ class Core
     {
         $this->parseUrl($_SERVER['REQUEST_URI']);
 
-        $this->connect_db();
+        $this->connectDb();
 
-        $this->user_access();
+        $this->userAccess();
 
         if (!empty($this->params[0]) && file_exists(CONTROLLERS_PATH . '/' . $this->params[0] . '.php')) {
             if ($this->params[0] == 'admin' && !$_SESSION['admin']) {
@@ -140,7 +140,7 @@ class Core
      * Setting the system messages
      */
 
-    function add_msg($text, $type)
+    function addMsg($text, $type)
     {
         $_SESSION['msgs'][] = compact('text', 'type');
     }
@@ -152,10 +152,10 @@ class Core
     public function redirect($href = '/', $text = false, $type = 'info')
     {
         if ($text !== false)
-            $this->add_msg($text, $type);
+            $this->addMsg($text, $type);
 
         header("Location: {$href}");
-        exit("Перенаправление на: <a href = '{$href}'>{$href}</a>");
+        exit("Redirect to: <a href = '{$href}'>{$href}</a>");
     }
 
     /*
