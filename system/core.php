@@ -4,12 +4,13 @@
  * system kernel
  */
 
-class Core {
+class Core
+{
 
-    public $request = NULL; 
-    public $default_controller = 'news'; 
-    public $default_method = 'index'; 
-    public $db = NULL; 
+    public $request = NULL;
+    public $default_controller = 'news';
+    public $default_method = 'index';
+    public $db = NULL;
     public $config = NULL;
 
     /*
@@ -18,7 +19,8 @@ class Core {
      * Overrides the class for their accessibility
      */
 
-    function __construct() {
+    function __construct()
+    {
         global $core;
         if (is_subclass_of($this, 'core')) {
             foreach ($core as $key => $val) {
@@ -34,7 +36,8 @@ class Core {
      * Parses the query string parameters on
      */
 
-    public function parseUrl($uri) {
+    public function parseUrl($uri)
+    {
         $this->request = parse_url($uri);
         $this->params = explode('/', $this->request['path']);
         $this->params = array_slice($this->params, 1);
@@ -50,7 +53,8 @@ class Core {
      * Connection database
      */
 
-    function connect_db() {
+    function connect_db()
+    {
         $this->db = new mysqli($this->config['db.host'], $this->config['db.user'], $this->config['db.pass'], $this->config['db.name'], $this->config['db.port']);
         if ($this->db->connect_error) {
             echo 'Failed to connect to database' . $this->db->connect_error;
@@ -62,7 +66,8 @@ class Core {
      * user Authentication
      */
 
-    function user_access() {
+    function user_access()
+    {
         if (!empty($_GET['logout'])) {
             $_SESSION['admin'] = false;
             $this->redirect('/', 'Exit executed successfully', 'success');
@@ -89,22 +94,23 @@ class Core {
      * Method platform initialization
      */
 
-    public function start() {
+    public function start()
+    {
         $this->parseUrl($_SERVER['REQUEST_URI']);
 
         $this->connect_db();
 
         $this->user_access();
 
-        if (!empty($this->params[0]) && file_exists(controllers_dir . '/' . $this->params[0] . '.php')) {
+        if (!empty($this->params[0]) && file_exists(CONTROLLERS_PATH . '/' . $this->params[0] . '.php')) {
             if ($this->params[0] == 'admin' && !$_SESSION['admin']) {
                 $this->redirect('/', 'You do not have access to this section', 'danger');
             }
-            include controllers_dir . '/' . $this->params[0] . '.php';
+            include CONTROLLERS_PATH . '/' . $this->params[0] . '.php';
             $controller = new $this->params[0]();
             $this->params = array_slice($this->params, 1);
         } else {
-            include controllers_dir . '/' . $this->default_controller . '.php';
+            include CONTROLLERS_PATH . '/' . $this->default_controller . '.php';
             $controller = new $this->default_controller();
         }
 
@@ -121,19 +127,21 @@ class Core {
      * Conclusion submission template and connection
      */
 
-    public function render($template, $view, $data) {
+    public function render($template, $view, $data)
+    {
         ob_start();
         extract($data);
-        include views_dir . '/' . $view . '.php';
+        include VIEWS_PATH . '/' . $view . '.php';
         $content = ob_get_clean();
-        include templates_dir . '/' . $template . '.php';
+        include TEMPLATES_PATH . '/' . $template . '.php';
     }
 
     /*
      * Setting the system messages
      */
 
-    function add_msg($text, $type) {
+    function add_msg($text, $type)
+    {
         $_SESSION['msgs'][] = compact('text', 'type');
     }
 
@@ -141,7 +149,8 @@ class Core {
      * Creating a redirect to another page
      */
 
-    public function redirect($href = '/', $text = false, $type = 'info') {
+    public function redirect($href = '/', $text = false, $type = 'info')
+    {
         if ($text !== false)
             $this->add_msg($text, $type);
 
@@ -153,12 +162,13 @@ class Core {
      * Loading of objects that are accessed
      */
 
-    public function &__get($name) {
+    public function &__get($name)
+    {
         global $core;
         if (isset($core->{$name}))
             return $core->{$name};
-        elseif (file_exists(models_dir . '/' . $name . '.php')) {
-            include_once models_dir . '/' . $name . '.php';
+        elseif (file_exists(MODELS_PATH . '/' . $name . '.php')) {
+            include_once MODELS_PATH . '/' . $name . '.php';
             $this->{$name} = new $name();
             return $this->{$name};
         } else
