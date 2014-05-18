@@ -7,11 +7,15 @@
 class Core
 {
 
-    public $request = NULL;
+    public $request = null;
     public $default_controller = 'news';
     public $default_method = 'index';
-    public $db = NULL;
-    public $config = NULL;
+    /**
+     * @var \PDO
+     */
+    public $db = null;
+    public $config = null;
+    private $params = array();
 
     /*
      * The constructor for the class of heirs
@@ -19,15 +23,25 @@ class Core
      * Overrides the class for their accessibility
      */
 
+    /**
+     * @TODO remove core from every class
+     * @see http://ru.wikipedia.org/wiki/%D0%92%D0%BD%D0%B5%D0%B4%D1%80%D0%B5%D0%BD%D0%B8%D0%B5_%D0%B7%D0%B0%D0%B2%D0%B8%D1%81%D0%B8%D0%BC%D0%BE%D1%81%D1%82%D0%B8
+     */
     function __construct()
     {
-        global $core;
-        if (is_subclass_of($this, 'core')) {
-            foreach ($core as $key => $val) {
-                if ((!is_string($core->$key) || !is_link($core->$key) ) && $this->$key != $core->$key && !is_object($this->$key)) {
-                    $this->$key = &$core->$key;
-                } else
-                    $this->$key = $core->$key;
+        // @TODO remove core from every class.
+        global $core; // that's awfull
+        if (!is_subclass_of($this, 'core')) {
+            return;
+        }
+        foreach ($core as $key => $val) {
+            if ((!is_string($core->$key) || !is_link($core->$key)) && $this->$key != $core->$key && !is_object(
+                    $this->$key
+                )
+            ) {
+                $this->$key = & $core->$key;
+            } else {
+                $this->$key = $core->$key;
             }
         }
     }
@@ -39,13 +53,14 @@ class Core
     public function parseUrl($uri)
     {
         $this->request = parse_url($uri);
-        $this->params = explode('/', $this->request['path']);
-        $this->params = array_slice($this->params, 1);
+        $this->params  = explode('/', $this->request['path']);
+        $this->params  = array_slice($this->params, 1);
         foreach ($this->params as $key => $param) {
-            if ($param != '')
+            if ($param != '') {
                 $this->params[$key] = urldecode($param);
-            else
+            } else {
                 unset($this->params[$key]);
+            }
         }
     }
 
@@ -53,13 +68,13 @@ class Core
      * Connection database
      */
 
-    function connectDb()
+    protected function connectDb()
     {
         $connect_str = 'mysql:host=' . $this->config['db.host'] . ';dbname=' . $this->config['db.name'];
-        $this->db = new PDO($connect_str, $this->config['db.user'], $this->config['db.pass']);
+        $this->db    = new PDO($connect_str, $this->config['db.user'], $this->config['db.pass']);
         $error_array = $this->db->errorInfo();
 
-        if ($this->db->errorCode() != 0000) {
+        if ($this->db->errorCode() != 0) {
             echo "Failed to connect to database: " . $error_array[2] . '<br />';
             exit();
         }
@@ -69,7 +84,7 @@ class Core
      * user Authentication
      */
 
-    function userAccess()
+    protected function userAccess()
     {
         if (!empty($_GET['logout'])) {
             $_SESSION['admin'] = false;
@@ -110,7 +125,7 @@ class Core
                 $this->redirect('/', 'You do not have access to this section', 'danger');
             }
             include CONTROLLERS_PATH . '/' . $this->params[0] . '.php';
-            $controller = new $this->params[0]();
+            $controller   = new $this->params[0]();
             $this->params = array_slice($this->params, 1);
         } else {
             include CONTROLLERS_PATH . '/' . $this->default_controller . '.php';
@@ -118,12 +133,12 @@ class Core
         }
 
         if (!empty($this->params[0]) && is_callable(array($controller, $this->params[0]))) {
-            $method = $this->params[0];
+            $method       = $this->params[0];
             $this->params = array_slice($this->params, 1);
-            call_user_func_array(array($controller, $method), $this->params);
         } else {
-            call_user_func_array(array($controller, 'index'), $this->params);
+            $method = 'index';
         }
+        call_user_func_array(array($controller, $method), $this->params);
     }
 
     /*
@@ -154,8 +169,9 @@ class Core
 
     public function redirect($href = '/', $text = false, $type = 'info')
     {
-        if ($text !== false)
+        if ($text !== false) {
             $this->addMsg($text, $type);
+        }
 
         header("Location: {$href}");
         exit("Redirect to: <a href = '{$href}'>{$href}</a>");
@@ -168,14 +184,15 @@ class Core
     public function &__get($name)
     {
         global $core;
-        if (isset($core->{$name}))
+        if (isset($core->{$name})) {
             return $core->{$name};
-        elseif (file_exists(MODELS_PATH . '/' . $name . '.php')) {
+        } elseif (file_exists(MODELS_PATH . '/' . $name . '.php')) {
             include_once MODELS_PATH . '/' . $name . '.php';
             $this->{$name} = new $name();
             return $this->{$name};
-        } else
+        } else {
             return false;
+        }
     }
 
 }

@@ -64,16 +64,15 @@
         </div>
 
         <div class="container">
-            <?php
-            if (!empty($_SESSION['msgs'])) {
-                foreach ($_SESSION['msgs'] as $msg) {
-                    echo "<div class='alert alert-{$msg['type']} alert-dismissable'>"
-                    . "<button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>"
-                    . "{$msg['text']}</div>";
-                }
-                $_SESSION['msgs'] = array();
-            }
-            ?>
+            <? if(!empty($_SESSION['msgs'])): ?>
+                <? foreach ($_SESSION['msgs'] as $msg): ?>
+                    <div class='alert alert-<?=$msg['type']?> alert-dismissable'>
+                        <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
+                        <?=$msg['text']?>
+                    </div>
+                <? endforeach; ?>
+                <? $_SESSION['msgs'] = array(); ?>
+            <? endif; ?>
             <?php echo $content; ?>
 
         </div><!-- /.container -->
