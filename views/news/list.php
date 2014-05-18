@@ -1,7 +1,7 @@
 <h1>Новости</h1>
 <?php
 if (empty($news)) {
-    echo "<h3>Новостей пока нет</h3>";
+    echo "<h3>No news yet</h3>";
 } else {
     ?>
     <ul class="timeline">
