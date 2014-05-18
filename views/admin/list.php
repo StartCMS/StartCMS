@@ -4,7 +4,7 @@
 </p>
 <?php
 if (empty($news)) {
-    echo "<h3>Новостей пока не добавдено</h3>";
+    echo "<h3>News has not yet added</h3>";
 } else {
     echo '<table class="table table-striped">';
     echo "<tr><th>News</th><th>Date</th><th></th></tr>";
