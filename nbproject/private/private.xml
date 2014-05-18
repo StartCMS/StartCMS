@@ -1,0 +1,22 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<project-private xmlns="http://www.netbeans.org/ns/project-private/1">
+    <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
+    <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
+        <group>
+            <file>file:/G:/OpenServer/domains/cms/system/config.ini</file>
+            <file>file:/G:/OpenServer/domains/cms/system/core.php</file>
+            <file>file:/G:/OpenServer/domains/cms/index.php</file>
+            <file>file:/G:/OpenServer/domains/cms/static/js/script.js</file>
+            <file>file:/G:/OpenServer/domains/cms/static/css/style.css</file>
+            <file>file:/G:/OpenServer/domains/cms/controllers/news.php</file>
+            <file>file:/G:/OpenServer/domains/cms/views/admin/list.php</file>
+            <file>file:/G:/OpenServer/domains/cms/controllers/admin.php</file>
+            <file>file:/G:/OpenServer/domains/cms/views/admin/edit.php</file>
+            <file>file:/G:/OpenServer/domains/cms/views/admin/add.php</file>
+            <file>file:/G:/OpenServer/domains/cms/templates/main.php</file>
+            <file>file:/G:/OpenServer/domains/cms/.htaccess</file>
+            <file>file:/G:/OpenServer/domains/cms/views/news/list.php</file>
+            <file>file:/G:/OpenServer/domains/cms/models/newsUI.php</file>
+        </group>
+    </open-files>
+</project-private>
