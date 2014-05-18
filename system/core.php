@@ -55,9 +55,12 @@ class Core
 
     function connectDb()
     {
-        $this->db = new mysqli($this->config['db.host'], $this->config['db.user'], $this->config['db.pass'], $this->config['db.name'], $this->config['db.port']);
-        if ($this->db->connect_error) {
-            echo 'Failed to connect to database' . $this->db->connect_error;
+        $connect_str = 'mysql:host=' . $this->config['db.host'] . ';dbname=' . $this->config['db.name'];
+        $this->db = new PDO($connect_str, $this->config['db.user'], $this->config['db.pass']);
+        $error_array = $this->db->errorInfo();
+
+        if ($this->db->errorCode() != 0000) {
+            echo "Failed to connect to database: " . $error_array[2] . '<br />';
             exit();
         }
     }
