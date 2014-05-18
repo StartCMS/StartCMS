@@ -1,4 +1,4 @@
-<h1>Новости</h1>
+<h1>News</h1>
 <?php
 if (empty($news)) {
     echo "<h3>No news yet</h3>";
