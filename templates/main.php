@@ -12,11 +12,11 @@
 
         <!-- Bootstrap core CSS -->
         <link href="/static/css/bootstrap.min.css" rel="stylesheet">
-        
+
 
         <!-- Custom styles for this template -->
         <link href="/static/css/bootstrap-theme.min.css" rel="stylesheet">
-        
+
         <link href="/static/css/style.css" rel="stylesheet">
 
         <!-- HTML5 shim and Respond.js IE8 support of HTML5 elements and media queries -->
@@ -64,15 +64,15 @@
         </div>
 
         <div class="container">
-            <? if(!empty($_SESSION['msgs'])): ?>
-                <? foreach ($_SESSION['msgs'] as $msg): ?>
-                    <div class='alert alert-<?=$msg['type']?> alert-dismissable'>
+            <?php if (!empty($_SESSION['msgs'])): ?>
+                <?php foreach ($_SESSION['msgs'] as $msg): ?>
+                    <div class='alert alert-<?= $msg['type'] ?> alert-dismissable'>
                         <button type='button' class='close' data-dismiss='alert' aria-hidden='true'>&times;</button>
-                        <?=$msg['text']?>
+                        <?= $msg['text'] ?>
                     </div>
-                <? endforeach; ?>
-                <? $_SESSION['msgs'] = array(); ?>
-            <? endif; ?>
+                <?php endforeach; ?>
+                <?php $_SESSION['msgs'] = array(); ?>
+            <?php endif; ?>
             <?php echo $content; ?>
 
         </div><!-- /.container -->
@@ -81,7 +81,7 @@
         <!-- Bootstrap core JavaScript
         ================================================== -->
         <!-- Placed at the end of the document so the pages load faster -->
-        
+
         <script src="/static/ckeditor/ckeditor.js"></script>
         <script src="/static/js/jquery-1.11.1.min.js"></script>
         <script src="/static/js/bootstrap.min.js"></script>

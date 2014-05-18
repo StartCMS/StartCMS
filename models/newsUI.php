@@ -12,7 +12,7 @@ class newsUI extends core
 
     function get_news()
     {
-        $query  = "SELECT * FROM `news` ORDER BY `date` DESC";
+        $query = "SELECT * FROM `news` ORDER BY `date` DESC";
         $result = $this->db->query($query);
 
         return $result->fetchAll();
@@ -25,7 +25,7 @@ class newsUI extends core
     function get($id)
     {
         $query = "SELECT * FROM `news` WHERE `id` = :id";
-        $sth   = $this->db->prepare($query);
+        $sth = $this->db->prepare($query);
         $sth->bindValue(':id', $id);
         $sth->execute();
 
@@ -39,11 +39,11 @@ class newsUI extends core
     function add_news($name, $text)
     {
         $query = "INSERT INTO `news` (`name`,`text`) VALUES (:name,:text)";
-        $sth   = $this->db->prepare($query);
+        $sth = $this->db->prepare($query);
         $sth->execute(array(
-                'name' => $name,
-                'text' => $text
-            ));
+            'name' => $name,
+            'text' => $text
+        ));
         return $this->db->lastInsertId();
     }
 
@@ -54,12 +54,12 @@ class newsUI extends core
     function edit_news($id, $name, $text)
     {
         $query = "UPDATE `news` SET `name` = :name, `text` = :text WHERE `id` = :id";
-        $sth   = $this->db->prepare($query);
+        $sth = $this->db->prepare($query);
         $sth->execute(array(
-                'name' => $name,
-                'text' => $text,
-                'id' => $id
-            ));
+            'name' => $name,
+            'text' => $text,
+            'id' => $id
+        ));
         return $sth->rowCount();
     }
 
@@ -70,7 +70,7 @@ class newsUI extends core
     function delete_news($id)
     {
         $query = "DELETE FROM `news` WHERE `id` = :id";
-        $sth   = $this->db->prepare($query);
+        $sth = $this->db->prepare($query);
         $sth->bindValue(':id', $id);
         $sth->execute();
         return $sth->rowCount();

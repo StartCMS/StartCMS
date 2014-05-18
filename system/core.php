@@ -10,6 +10,7 @@ class Core
     public $request = null;
     public $default_controller = 'news';
     public $default_method = 'index';
+
     /**
      * @var \PDO
      */
@@ -53,8 +54,8 @@ class Core
     public function parseUrl($uri)
     {
         $this->request = parse_url($uri);
-        $this->params  = explode('/', $this->request['path']);
-        $this->params  = array_slice($this->params, 1);
+        $this->params = explode('/', $this->request['path']);
+        $this->params = array_slice($this->params, 1);
         foreach ($this->params as $key => $param) {
             if ($param != '') {
                 $this->params[$key] = urldecode($param);
@@ -71,7 +72,7 @@ class Core
     protected function connectDb()
     {
         $connect_str = 'mysql:host=' . $this->config['db.host'] . ';dbname=' . $this->config['db.name'];
-        $this->db    = new PDO($connect_str, $this->config['db.user'], $this->config['db.pass']);
+        $this->db = new PDO($connect_str, $this->config['db.user'], $this->config['db.pass']);
         $error_array = $this->db->errorInfo();
 
         if ($this->db->errorCode() != 0) {
@@ -125,7 +126,7 @@ class Core
                 $this->redirect('/', 'You do not have access to this section', 'danger');
             }
             include CONTROLLERS_PATH . '/' . $this->params[0] . '.php';
-            $controller   = new $this->params[0]();
+            $controller = new $this->params[0]();
             $this->params = array_slice($this->params, 1);
         } else {
             include CONTROLLERS_PATH . '/' . $this->default_controller . '.php';
@@ -133,7 +134,7 @@ class Core
         }
 
         if (!empty($this->params[0]) && is_callable(array($controller, $this->params[0]))) {
-            $method       = $this->params[0];
+            $method = $this->params[0];
             $this->params = array_slice($this->params, 1);
         } else {
             $method = 'index';
